@@ -1,0 +1,75 @@
+//Main code 
+
+module alu( a,b,en,oc,r );
+input [31:0]a;
+input [31:0]b;
+input en;
+input [3:0]oc;
+output reg [32:0]r;
+//output reg ack;
+always@(a,b,en,oc)begin
+if(en==1) begin
+case(oc)
+4'b0000 :r=a+b; // 0 add
+4'b0001 :r=a-b; // 1 sub
+4'b0010 :r=a/b; //2 div
+4'b0011 :r=a*b; //3 mul
+4'b0100 :r=a%b; //4 mod
+4'b0101 :r=~(a&b); //5 nand
+4'b0110 :r=a&b; //6 and
+4'b0111 :r=a|b; //7 or
+4'b1000 :r=a^b; //8 xor
+4'b1001 :r=~(a|b); //9 nor
+4'b1010 :r=~(a^b); //10 xnor
+4'b1011 :r=b-1; //11 decrement
+4'b1100 :r=~a; //12 not
+4'b1101 :r=~b; //13
+4'b1110 :r=a+1; //14 increment
+4'b1111 :r=b+1; //15 custom
+endcase
+end
+else begin
+r=32'hz;
+end
+end
+endmodule
+
+//Testbench
+
+module alutb;
+reg [31:0]a;
+reg [31:0]b;
+reg en;
+reg [3:0]oc;
+wire [32:0]r;
+//wire ack;
+alu uut(
+.a(a),
+.b(b),
+.en(en),
+.oc(oc),
+.r(r)
+//.ack(ack)
+);
+initial begin 
+a=32'b00000000000000000000000000000001;
+b=32'b00000000000000000000000000000001;
+en=1'b1;
+oc=4'b0000; #100;
+oc=4'b0001; #100;
+oc=4'b0010; #100;
+oc=4'b0011; #100;
+oc=4'b0100; #100;
+oc=4'b0101; #100;
+oc=4'b0110; #100;
+oc=4'b0111; #100;
+oc=4'b1000; #100;
+oc=4'b1001; #100;
+oc=4'b1010; #100;
+oc=4'b1011; #100;
+oc=4'b1100; #100;
+oc=4'b1101; #100;
+oc=4'b1110; #100;
+oc=4'b1111; #100;
+end
+endmodule
